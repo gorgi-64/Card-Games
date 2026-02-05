@@ -124,7 +124,7 @@ public class Blackjack {
             }
         }
         while(true) {
-            int choice = 0;
+            int choice;
             if(player.getYou()) {
                 player.printCards();
                 System.out.println("hit: 1, fold: 2");
@@ -203,7 +203,7 @@ public class Blackjack {
         pause();
         for(int i = 0; i < playerAmount - 1; i++) {
             if(playerS[i].getCard(0).getScore() == playerS[i].getCard(1).getScore()) {
-                int choice = 0;
+                int choice;
                 if(playerS[i].getYou()) {
                     System.out.println("You can split. Do you want to split? (1 for yes, 2 for no)");
                     Scanner input = new Scanner(System.in);
