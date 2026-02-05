@@ -54,7 +54,7 @@ class PlayerBJ extends Player {
         player.remove(1);
     }
 }
-
+//hi
 public class Blackjack {
     static Random rand = new Random();
     static int counter = 0;
