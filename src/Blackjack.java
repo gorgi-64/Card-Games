@@ -26,9 +26,9 @@ class PlayerBJ extends Player {
     }
     public int suma() {
         int s = 0;
-        for(int i = 0; i < player.size(); i++) {
-            if(player.get(i).getScore() > 10 || player.get(i).getScore() == 1) player.get(i).setScore(s + 11 <= 21);
-            s += player.get(i).getScore();
+        for (Card card : player) {
+            if (card.getScore() > 10 || card.getScore() == 1) card.setScore(s + 11 <= 21);
+            s += card.getScore();
         }
         sum = s;
         return s;
@@ -72,7 +72,7 @@ public class Blackjack {
         }
         int[] arraycopy = new int[52];
         for(int i = 0; i < 52; i++) {
-            int newrandom = 0;
+            int newrandom;
             do {
                 newrandom = newrand.nextInt(52);
             } while(arraycopy[newrandom] != 0);
@@ -87,7 +87,7 @@ public class Blackjack {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println("Emi...");
         }
     }
     public static void hit(PlayerBJ player) {
@@ -103,12 +103,11 @@ public class Blackjack {
     }
     public static double agressiveLevel(){
         double choice = Math.random();
-        if(choice < 1/5) return 0.5;
-        if(choice < 2/5) return 0.75;
-        if(choice < 3/5) return 1.25;
-        if(choice < 4/5) return 1.5;
-        if(choice < 5/5) return 2.0;
-        return 1.0;
+        if(choice < 1.0/5) return 0.5;
+        if(choice < 2.0/5) return 0.75;
+        if(choice < 3.0/5) return 1.25;
+        if(choice < 4.0/5) return 1.5;
+        return 2.0;
     }
     public static void hand(PlayerBJ player) {
         Scanner input = new Scanner(in);
@@ -161,26 +160,25 @@ public class Blackjack {
     public static void winConditions(PlayerBJ one, PlayerBJ dealer) {
         if(one.suma() > 21) {
             System.out.println("Bust!");
-            return;
+
         }
         else if(one.suma() == dealer.suma()) {
             System.out.println("Push!");
-            return;
         }
 
         else if(one.suma() == 21 && one.sizes() == 2) {
             System.out.println("Blackjack!");
-            return;
+
         }
 
         else if(one.suma() > dealer.suma() && one.suma() < 21) {
             System.out.println("Win!");
-            return;
+
         }
 
         else if(one.suma() <= 21 && dealer.suma() > 21) {
             System.out.println("Win!");
-            return;
+
         }
 
         else System.out.println("Lose!");
@@ -232,7 +230,6 @@ public class Blackjack {
             if(split[i] != null) System.out.println("Final split score: " + split[i].suma());
             pause();
         }
-        boolean tie = false;
         for(int i = 0; i < playerAmount - 1; i++) {
             System.out.print("Player " + i + ((i == playnernumber) ? "(you)" : "") + ": ");
             winConditions(playerS[i], playerS[playerAmount - 1]);
