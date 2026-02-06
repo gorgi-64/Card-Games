@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 class PlayerW extends Player{
     private boolean finalBattle;
@@ -14,9 +15,70 @@ class PlayerW extends Player{
     public void removeCard(){
         player.remove(0);
     }
+    public void addCards(ArrayList<Card> array){
+        player.addAll(array);
+    }
+    public void removeCards(int start, int end){
+        player.subList(start, end + 1).clear();
+    }
+    public ArrayList<Card> returnCards(int start, int end){
+        return War.subArrayList(player, start, end);
+    }
 }
 public class War {
-    public static ArrayList<Card> deck = new ArrayList<>();
+    public static ArrayList<Card> subArrayList(ArrayList<Card> one, int firstIndex, int secondIndex){
+        ArrayList<Card> nov = new ArrayList<>();
+        for(int i = firstIndex; i < secondIndex; i++){
+            nov.add(one.get(i));
+        }
+        return nov;
+    }
+    public static int potSz(int sz1, int sz2){
+        if(Math.min(sz1, sz2) < 3) return Math.min(Math.min(sz1, sz2), 3);
+        return 0;
+    }
+    public static void war(PlayerW one, PlayerW two, ArrayList<Card> pot){
+        if(Math.min(one.size(), two.size()) == 0){
+            if(one.size() == 0){
+                one.addCards(pot);
+                System.out.print("Player one ");
+            }
+            else{
+                two.addCards(pot);
+                System.out.print("Player two ");
+            }
+            System.out.println("has zero cards and wins the war!");
+            //house rules
+            return;
+        }
+        int potsz = potSz(one.size(), two.size()) - 1;
+        Card lastOne = one.getCard(potsz);
+        Card lastTwo = two.getCard(potsz);
+        pot.addAll(one.returnCards(0, potsz));
+        pot.addAll(two.returnCards(0, potsz));
+        one.removeCards(0, potsz);
+        two.removeCards(0, potsz);
+        if(lastOne.getScore() > lastTwo.getScore()){
+            System.out.println("Player one wins the war!");
+            one.addCards(pot);
+            return;
+        }
+        if(lastOne.getScore() < lastTwo.getScore()){
+            System.out.println("Player two wins the war!");
+            two.addCards(pot);
+            return;
+        }
+        else{
+            war(one, two, pot);
+        }
+
+    }
+
+    static ArrayList<Card> deck = new ArrayList<>();
+    public static void pause() {
+        Scanner input = new Scanner(System.in);
+        input.nextLine();
+    }
     public static void process(){
         //ArrayList<CardBJ> deck) {
         Random newrand = new Random(System.nanoTime());
@@ -37,87 +99,39 @@ public class War {
             deck.add(temp);
         }
     }
-    public static ArrayList<Card> subArrayList(ArrayList<Card> one, int firstIndex, int secondIndex){
-        ArrayList<Card> nov = new ArrayList<>();
-        for(int i = firstIndex; i < secondIndex; i++){
-            nov.add(one.get(i));
+    public static void wait(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            System.err.println("Emi...");
         }
-        return nov;
-    }
-
-    public static int pushSize(int one, int two){
-        return Math.max(Math.min(Math.min(one, two)- 1, 3), 1);
-    }
-    public static void war(PlayerW one, PlayerW two, ArrayList<Card> pot){
-        pot.addAll(subArrayList(one.copy(), 0, pushSize(one.size(), two.size())));
-        pot.addAll(subArrayList(two.copy(), 0, pushSize(one.size(), two.size())));
-
-        int onefinal = one.getCard(pushSize(one.size(), two.size())).getScore();
-        int twofinal = two.getCard(pushSize(one.size(), two.size())).getScore();
-
-        one.removeCard(0, pushSize(one.size(), two.size()));
-        two.removeCard(0, pushSize(one.size(), two.size()));
-        if(Math.min(one.size(), two.size()) == 0){
-            System.out.println("Player" +
-                    (one.size() < two.size() ? "one" : "two")
-                    + "has no cards and wins the war!");
-            //house rules :3
-            if(one.size() < two.size()){
-                one.addCards(pot);
-                return;
-            }
-            two.addCards(pot);
-        }
-        if(onefinal > twofinal){
-            System.out.println("Player one wins the war!");
-            one.addCards(pot);
-        }
-        if(onefinal < twofinal){
-            System.out.println("Player two wins the war!");
-            two.addCards(pot);
-            return;
-        }
-        else war(one, two, pot);
-
     }
     public static void main(String[] args) {
         process();
-
+        Random newrand = new Random(System.nanoTime());
         PlayerW one = new PlayerW(subArrayList(deck, 0, 25));
         PlayerW two = new PlayerW(subArrayList(deck, 26, 51));
-
         while(one.size() != 0 && two.size() != 0){
-            Card p1 = one.getCard(0);
-            Card p2 = two.getCard(0);
-            one.removeCard(0, 0);
-            two.removeCard(0, 0);
-            System.out.println("Player one gives: " + p1.getSymbol());
-            System.out.println("Player two gives: " + p2.getSymbol());
-            if(p1.getScore() > p2.getScore()){
+            System.out.println("Player one gives: " + one.getCard(0).getSymbol());
+            System.out.println("Player two gives: " + two.getCard(0).getSymbol());
+            ArrayList<Card> pot = new ArrayList<>();
+            int f = one.getCard(0).getScore();
+            int s = two.getCard(0).getScore();
+            pot.add(one.getCard(0));
+            pot.add(two.getCard(0));
+            one.removeCard();
+            two.removeCard();
+            if(f > s){
                 System.out.println("Player one won the battle!");
-                one.addCard(p1);
-                one.addCard(p2);
-
+                one.addCards(pot);
             }
-            else if(one.getCard(0).getScore() < two.getCard(0).getScore()){
+            else if(f < s){
                 System.out.println("Player two won the battle!");
-                two.addCard(p1);
-                two.addCard(p2);
+                two.addCards(pot);
             }
             else{
-                ArrayList<Card> pot = new ArrayList<>();
-                pot.add(p1);
-                pot.add(p2);
-                System.out.println("War!");
                 war(one, two, pot);
             }
-            Blackjack.wait(250);
-        }
-        if(one.size() == 0){
-            System.out.println("Player one won the game!");
-        }
-        else{
-            System.out.println("Player two won the game!");
         }
 
     }
