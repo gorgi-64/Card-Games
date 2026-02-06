@@ -115,7 +115,6 @@ public class War {
     }
     public static void main(String[] args) {
         process();
-        Random newrand = new Random(System.nanoTime());
         PlayerW one = new PlayerW(subArrayList(deck, 0, 25));
         PlayerW two = new PlayerW(subArrayList(deck, 26, 51));
         while(one.size() != 0 && two.size() != 0){
@@ -140,6 +139,6 @@ public class War {
                 war(one, two, pot);
             }
         }
-
+        one.printCards();
     }
 }
