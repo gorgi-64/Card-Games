@@ -34,10 +34,11 @@ public class War {
         return nov;
     }
     public static int potSz(int sz1, int sz2){
-        if(Math.min(sz1, sz2) < 3) return Math.min(Math.min(sz1, sz2), 3);
-        return 0;
+        return Math.min(Math.min(sz1, sz2), 3);
+
     }
     public static void war(PlayerW one, PlayerW two, ArrayList<Card> pot){
+        System.out.println("War!");
         if(Math.min(one.size(), two.size()) == 0){
             if(one.size() == 0){
                 one.addCards(pot);
@@ -58,6 +59,12 @@ public class War {
         pot.addAll(two.returnCards(0, potsz));
         one.removeCards(0, potsz);
         two.removeCards(0, potsz);
+        for(int i = 0; i < pot.size(); i++){
+            if(i == 0) System.out.print("Player one gives: ");
+            System.out.print(pot.get(i).getSymbol() + " ");
+            if(i == (pot.size() - 1) / 2) System.out.print("\nPlayer two gives: ");
+        }
+        System.out.print("\n");
         if(lastOne.getScore() > lastTwo.getScore()){
             System.out.println("Player one wins the war!");
             one.addCards(pot);
