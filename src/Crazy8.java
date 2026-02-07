@@ -13,6 +13,7 @@ class Card8 extends Card{
         setScore(temp);
     }
 }
+
 public class Crazy8 {
     static ArrayList<Card> deck;
 

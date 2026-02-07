@@ -2,13 +2,15 @@ public class Card {
 
     protected char symbol;
     protected int score;
+    protected char suit;
 
     public Card(){
         symbol = '0';
         score = 0;
     }
 
-    public Card(int temp) {
+    public Card(int number){
+        int temp = (number % 13) + 2;
         score = temp;
         if(temp < 10) symbol = (char) ('0' + temp);
         else switch(temp) {
@@ -28,6 +30,23 @@ public class Card {
                 symbol = 'A';
                 break;
         }
+        switch(number % 4){
+            case 0:
+                suit = '\u2665';
+                break;
+            case 1:
+                suit = '\u2666';
+                break;
+            case 2:
+                suit = '\u2660';
+                break;
+            case 3:
+                suit = '\u2663';
+                break;
+            default:
+                suit = '0';
+                break;
+        }
     }
 
     public void setScore(int temp){
@@ -37,8 +56,8 @@ public class Card {
     public int getScore() {
         return score;
     }
-    public char getSymbol() {
-        return symbol;
+    public String getSymbol() {
+        return "" + symbol + suit;
     }
     public void setScore(boolean ace) {
         if(ace) score = 11;
