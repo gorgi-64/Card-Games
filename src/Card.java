@@ -2,7 +2,7 @@ public class Card {
 
     protected char symbol;
     protected int score;
-    protected char suit;
+    protected int suit;
 
     public Card(){
         symbol = '0';
@@ -30,22 +30,20 @@ public class Card {
                 symbol = 'A';
                 break;
         }
-        switch(number % 4){
+        suit = number % 4;
+    }
+    public char suitSymbol(int number){
+        switch(number){
             case 0:
-                suit = '\u2665';
-                break;
+                return '♥';
             case 1:
-                suit = '\u2666';
-                break;
+                return '♦';
             case 2:
-                suit = '\u2660';
-                break;
+                return '♠';
             case 3:
-                suit = '\u2663';
-                break;
+                return '♣';
             default:
-                suit = '0';
-                break;
+                return '0';
         }
     }
 
@@ -56,8 +54,18 @@ public class Card {
     public int getScore() {
         return score;
     }
-    public String getSymbol() {
-        return "" + symbol + suit;
+    public String getAll() {
+        return "" + symbol + suitSymbol(suit);
+    }
+    public char getSymbol(){
+        return symbol;
+    }
+    public char getSuit(){
+        return suitSymbol(suit);
+    }
+    public int getSuit(boolean that){
+        if(that) return suit;
+        return 0;
     }
     public void setScore(boolean ace) {
         if(ace) score = 11;

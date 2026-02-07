@@ -21,6 +21,9 @@ class PlayerBJ extends Player {
     int condition;
     boolean dealer;
     int sum;
+    public PlayerBJ(){
+        super(true);
+    }
     public boolean getYou() {
         return you;
     }
@@ -93,7 +96,7 @@ public class Blackjack {
     public static void hit(PlayerBJ player) {
         counter++;
         player.addCard(deck.get(counter));
-        System.out.println("Player hits and gets a " + deck.get(counter).getSymbol());
+        System.out.println("Player hits and gets a " + deck.get(counter).getAll());
         wait(450);
 
     }
@@ -195,8 +198,8 @@ public class Blackjack {
         counter = (playerAmount * 2) - 1; //8 CardBJs, 0 index
         System.out.println("Every player's CardBJs:" );
         for(int i = 0; i < playerAmount; i++) {
-            System.out.print("Player " + i + ((i == playnernumber) ? "(you)" : "") + ((i == playerAmount - 1) ? "(dealer)" : "") + ": " + playerS[i].getCard(0).getSymbol());
-            System.out.println(", " + ((i == playerAmount - 1) ? "?" : playerS[i].getCard(1).getSymbol()));
+            System.out.print("Player " + i + ((i == playnernumber) ? "(you)" : "") + ((i == playerAmount - 1) ? "(dealer)" : "") + ": " + playerS[i].getCard(0).getAll());
+            System.out.println(", " + ((i == playerAmount - 1) ? "?" : playerS[i].getCard(1).getAll()));
 
         }
         System.out.println("You are player " + playnernumber);

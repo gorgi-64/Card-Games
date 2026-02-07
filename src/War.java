@@ -4,7 +4,8 @@ import java.util.Scanner;
 
 class PlayerW extends Player{
     private boolean finalBattle;
-    public PlayerW(ArrayList<Card> cards){
+    public PlayerW(ArrayList<Card> cards, boolean you){
+        super(you);
         player = cards;
         you = false;
     }
@@ -61,7 +62,7 @@ public class War {
         two.removeCards(0, potsz);
         for(int i = 0; i < pot.size(); i++){
             if(i == 0) System.out.print("Player one gives: ");
-            System.out.print(pot.get(i).getSymbol() + " ");
+            System.out.print(pot.get(i).getAll() + " ");
             if(i == (pot.size() - 1) / 2) System.out.print("\nPlayer two gives: ");
         }
         System.out.print("\n");
@@ -115,11 +116,11 @@ public class War {
     }
     public static void main(String[] args) {
         process();
-        PlayerW one = new PlayerW(subArrayList(deck, 0, 25));
-        PlayerW two = new PlayerW(subArrayList(deck, 26, 51));
+        PlayerW one = new PlayerW(subArrayList(deck, 0, 25), false);
+        PlayerW two = new PlayerW(subArrayList(deck, 26, 51), false);
         while(one.size() != 0 && two.size() != 0){
-            System.out.println("Player one gives: " + one.getCard(0).getSymbol());
-            System.out.println("Player two gives: " + two.getCard(0).getSymbol());
+            System.out.println("Player one gives: " + one.getCard(0).getAll());
+            System.out.println("Player two gives: " + two.getCard(0).getAll());
             ArrayList<Card> pot = new ArrayList<>();
             int f = one.getCard(0).getScore();
             int s = two.getCard(0).getScore();

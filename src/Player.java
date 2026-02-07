@@ -3,6 +3,10 @@ import java.util.ArrayList;
 public abstract class Player {
     protected ArrayList<Card> player = new ArrayList<Card>();
     protected boolean you;
+    public Player(boolean you){
+        player = new ArrayList<>();
+        this.you = you;
+    }
     public void addCard(Card card){
         player.add(card);
     }
@@ -14,7 +18,7 @@ public abstract class Player {
     }
     public void printCards(){
         for(int i = 0; i < player.size(); i++) {
-            System.out.print(player.get(i).getSymbol());
+            System.out.print(player.get(i).getAll());
             if(i != player.size() - 1) System.out.print(", ");
         }
     }
