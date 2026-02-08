@@ -1,20 +1,7 @@
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
-
-class Card8 extends Card{
-    @Override
-    public void setScore(int temp){
-        if(temp == 8) score = 80;
-        if(temp >= 11 && temp <= 13) score = 10;
-        if(temp == 14) score = 1;
-        score = temp;
-    }
-    public Card8(int temp){
-        super(temp);
-        setScore(temp);
-    }
-}
 class PlayerC8 extends Player{
     static Scanner input = new Scanner(System.in);
     protected int personality;
@@ -26,9 +13,10 @@ class PlayerC8 extends Player{
         }
 
     }
-    public PlayerC8(boolean you, int personality){
+    public PlayerC8(boolean you, int personality, ArrayList<Card> player){
         super(you);
         this.personality = personality;
+        this.player = player;
     }
     public static boolean isPlayable(Card top, Card card){
         return card.getSymbol() == top.getSymbol() || card.getSuit() == top.getSuit() || card.getSymbol() == '8';
@@ -88,6 +76,14 @@ public class Crazy8 {
     static ArrayList<Card> deck;
 
     public static void main(String[] args) {
-
+        Card.process(deck, 2);
+        int counter = 0;
+        PlayerC8[] players = new PlayerC8[6];
+        for(int i = 0; i < 6; i++){
+            PlayerC8 temp;
+                int personality = (int)(Math.random() * 5) + 1;
+                temp = new PlayerC8(i == 0, ((i == 0) ? 0 : personality), War.subArrayList(deck, counter, counter + 7));
+                counter += 7;
+        }
     }
 }

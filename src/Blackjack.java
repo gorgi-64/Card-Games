@@ -4,19 +4,6 @@ import java.util.Random;
 
 import static java.lang.System.in;
 
-class CardBJ extends Card{
-    @Override
-    public void setScore(int temp){
-        if(temp <= 10) score = temp;
-        else if(temp != 14) score = 10;
-        else score = 14;
-    }
-    public CardBJ(int temp){
-        super(temp);
-        setScore(temp);
-    }
-}
-
 class PlayerBJ extends Player {
     int condition;
     boolean dealer;
@@ -46,7 +33,7 @@ class PlayerBJ extends Player {
     public boolean getDealer() {
         return dealer;
     }
-    public void constructor(CardBJ one, CardBJ two, boolean deal, boolean ti) {
+    public void constructor(Card one, Card two, boolean deal, boolean ti) {
         addCard(one);
         addCard(two);
         setDealer(deal);
@@ -61,30 +48,10 @@ class PlayerBJ extends Player {
 public class Blackjack {
     static Random rand = new Random();
     static int counter = 0;
-    static ArrayList<CardBJ> deck = new ArrayList<>();
+    static ArrayList<Card> deck = new ArrayList<>();
     public static void pause() {
         Scanner input = new Scanner(in);
         input.nextLine();
-    }
-    public static void process(){
-        //ArrayList<CardBJ> deck) {
-        Random newrand = new Random(System.nanoTime());
-        int[] array = new int[52];
-        for(int i = 0; i < 52; i++) {
-            array[i] = (i % 13) + 2;
-        }
-        int[] arraycopy = new int[52];
-        for(int i = 0; i < 52; i++) {
-            int newrandom;
-            do {
-                newrandom = newrand.nextInt(52);
-            } while(arraycopy[newrandom] != 0);
-            arraycopy[newrandom] = array[i];
-        }
-        for(int i = 0; i  < 52; i++) {
-            CardBJ temp = new CardBJ(arraycopy[i]);
-            deck.add(temp);
-        }
     }
     public static void wait(int time) {
         try {
@@ -187,7 +154,7 @@ public class Blackjack {
         else System.out.println("Lose!");
     }
     public static void gameloop(int playerAmount) {
-        process();
+        Card.process(deck, 1);
         PlayerBJ[] playerS = new PlayerBJ[playerAmount];
         PlayerBJ[] split = new PlayerBJ[playerAmount];
         int playnernumber = rand.nextInt(playerAmount);
@@ -195,8 +162,8 @@ public class Blackjack {
             playerS[i] = new PlayerBJ();
             playerS[i].constructor(deck.get(i * 2), deck.get(i * 2 + 1), (i == playerAmount - 1), (i == playnernumber));
         }
-        counter = (playerAmount * 2) - 1; //8 CardBJs, 0 index
-        System.out.println("Every player's CardBJs:" );
+        counter = (playerAmount * 2) - 1; //8 Cards, 0 index
+        System.out.println("Every player's Cards:" );
         for(int i = 0; i < playerAmount; i++) {
             System.out.print("Player " + i + ((i == playnernumber) ? "(you)" : "") + ((i == playerAmount - 1) ? "(dealer)" : "") + ": " + playerS[i].getCard(0).getAll());
             System.out.println(", " + ((i == playerAmount - 1) ? "?" : playerS[i].getCard(1).getAll()));
