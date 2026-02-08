@@ -101,7 +101,5 @@ public class Card {
             Card temp = new Card(arraycopy[i], game);
             deck.add(temp);
         }
-
-
     }
 }

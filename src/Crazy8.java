@@ -27,6 +27,13 @@ class PlayerC8 extends Player{
         }
         return false;
     }
+    public static int contains(char rank, ArrayList<Card> playable){
+        for(int i = 0; i < playable.size(); i++ ){
+            Card card = playable.get(i);
+            if(card.getSymbol() == rank) return i;
+        }
+        return -1;
+    }
     public static int highestP(ArrayList<Card> cards, Card top){
         int highest = 0;
         for(int i = 0; i < cards.get(0).getScore(); i++){
@@ -65,13 +72,30 @@ class PlayerC8 extends Player{
             return highestP(player, top);
         }
 
-        int[] suitCount = {0, 0, 0, 0};
-        for (Card card : player) {
-            suitCount[card.getSuit()]++;
+            int[] suitCount = {0, 0, 0, 0};
+            for(int i = 0; i < player.size(); i++){
+                if(playable.contains(i)) suitCount[player.get(i).getSuit(true)]++;
+            }
+            if(personality == 4){
+                System.out.println("In development");
+                personality = 5;
+            }
+            if(personality == 5){
+                if((player.size() == 2 || player.size() == 3) && contains('8', player) != -1) return contains('8', player);
+                int play;
+                do{
+                    play = highestP(player, top);
+                }while(!isPlayable(player.get(play), top) && player.get(play).getSymbol() != '8');
+                return play;
+
+            }
+
+            return 0;
         }
-        return 0;
-    }
+
 }
+
+
 public class Crazy8 {
     static ArrayList<Card> deck;
 
