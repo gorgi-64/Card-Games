@@ -54,22 +54,12 @@ public class Blackjack {
     static Random rand = new Random();
     static int counter = 0;
     static ArrayList<Card> deck = new ArrayList<>();
-    public static void pause() {
-        Scanner input = new Scanner(in);
-        input.nextLine();
-    }
-    public static void wait(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            System.err.println("Emi...");
-        }
-    }
-    public static void hit(PlayerBJ player) {
+    static Scanner input = new Scanner(System.in);
+     static void hit(PlayerBJ player) {
         counter++;
         player.addCard(deck.get(counter));
         System.out.println("Player hits and gets a " + deck.get(counter).getAll());
-        wait(450);
+        General.wait(450);
 
     }
     public static void twentyone(boolean bust) {
@@ -84,7 +74,7 @@ public class Blackjack {
         if(choice < 4.0/5) return 1.5;
         return 2.0;
     }
-    public static void hand(PlayerBJ player) {
+    static void hand(PlayerBJ player) {
         Scanner input = new Scanner(in);
         player.printCards();
         if(player.getDealer() && player.suma() < 17) {
@@ -132,7 +122,7 @@ public class Blackjack {
         }
 
     }
-    public static void winConditions(PlayerBJ one, PlayerBJ dealer) {
+    static void winConditions(PlayerBJ one, PlayerBJ dealer) {
         if(one.suma() > 21) {
             System.out.println("Bust!");
 
@@ -159,7 +149,7 @@ public class Blackjack {
         else System.out.println("Lose!");
     }
     public static void gameloop(int playerAmount) {
-        Card.process(deck, 1);
+        General.process(deck, 1);
         PlayerBJ[] playerS = new PlayerBJ[playerAmount];
         PlayerBJ[] split = new PlayerBJ[playerAmount];
         int playnernumber = rand.nextInt(playerAmount);
@@ -175,7 +165,7 @@ public class Blackjack {
 
         }
         System.out.println("You are player " + playnernumber);
-        pause();
+        General.pause();
         for(int i = 0; i < playerAmount - 1; i++) {
             if(playerS[i].getCard(0).getScore() == playerS[i].getCard(1).getScore()) {
                 int choice;
@@ -203,7 +193,7 @@ public class Blackjack {
             if(split[i] != null) hand(split[i]);
             System.out.println("Final score:" + playerS[i].suma());
             if(split[i] != null) System.out.println("Final split score: " + split[i].suma());
-            pause();
+            General.pause();
         }
         for(int i = 0; i < playerAmount - 1; i++) {
             System.out.print("Player " + i + ((i == playnernumber) ? "(you)" : "") + ": ");
@@ -219,7 +209,8 @@ public class Blackjack {
             rand = new Random(System.nanoTime());
             rand = new Random(System.nanoTime());
             gameloop(6);
-            pause();
+            General.pause();
+            int decision = input.nextInt();
         }
 
     }

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public abstract class Player {
-    protected ArrayList<Card> player = new ArrayList<Card>();
+    protected ArrayList<Card> player;
     protected boolean you;
     public Player(boolean you){
         player = new ArrayList<>();
@@ -22,4 +22,5 @@ public abstract class Player {
             if(i != player.size() - 1) System.out.print(", ");
         }
     }
+
 }

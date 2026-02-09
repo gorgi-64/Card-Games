@@ -1,9 +1,9 @@
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 class PlayerW extends Player{
     private boolean finalBattle;
+    @SuppressWarnings("All")
     public PlayerW(ArrayList<Card> cards, boolean you){
         super(you);
         player = cards;
@@ -38,7 +38,7 @@ public class War {
         return Math.min(Math.min(sz1, sz2), 3);
 
     }
-    public static void war(PlayerW one, PlayerW two, ArrayList<Card> pot){
+     static void war(PlayerW one, PlayerW two, ArrayList<Card> pot){
         System.out.println("War!");
         if(Math.min(one.size(), two.size()) == 0){
             if(one.size() == 0){
@@ -74,7 +74,6 @@ public class War {
         if(lastOne.getScore() < lastTwo.getScore()){
             System.out.println("Player two wins the war!");
             two.addCards(pot);
-            return;
         }
         else{
             war(one, two, pot);
@@ -83,19 +82,9 @@ public class War {
     }
 
     static ArrayList<Card> deck = new ArrayList<>();
-    public static void pause() {
-        Scanner input = new Scanner(System.in);
-        input.nextLine();
-    }
-    public static void wait(int time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            System.err.println("Emi...");
-        }
-    }
+
     public static void main(String[] args) {
-        Card.process(deck, 0);
+        General.process(deck, 0);
         PlayerW one = new PlayerW(subArrayList(deck, 0, 25), false);
         PlayerW two = new PlayerW(subArrayList(deck, 26, 51), false);
         while(one.size() != 0 && two.size() != 0){
@@ -119,7 +108,9 @@ public class War {
             else{
                 war(one, two, pot);
             }
+            General.wait(1000);
         }
-        one.printCards();
+        if(one.size() == 0) System.out.println("Player two wins!");
+        else System.out.println("Player one wins!");
     }
 }

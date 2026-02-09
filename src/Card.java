@@ -1,15 +1,10 @@
-import java.util.Random;
-import java.util.ArrayList;
 public class Card {
 
     protected char symbol;
     protected int score;
     protected int suit;
 
-    public Card(){
-        symbol = '0';
-        score = 0;
-    }
+
 
     public Card(int number, int game){
         int temp = (number % 13) + 2;
@@ -76,31 +71,11 @@ public class Card {
         if(that) return suit;
         return 0;
     }
-    public void setScore(boolean ace) {
+    /*public void setScore(boolean ace) {
         if(ace) score = 11;
         else score = 1;
-    }
-    public void setScore(int score){
+    }*/
+    /*public void setScore(int score){
         this.score = score;
-    }
-    public static void process(ArrayList<Card> deck, int game){
-        Random newrand = new Random(System.nanoTime());
-        int[] array = new int[52];
-        for(int i = 0; i < 52; i++) {
-            array[i] = i;
-        }
-        int[] arraycopy = new int[52];
-        for(int i = 0; i < 52; i++) {
-            int newrandom;
-            do {
-                newrandom = newrand.nextInt(52);
-            } while(arraycopy[newrandom] != 0);
-            arraycopy[newrandom] = array[i];
-        }
-        if(deck == null) deck = new ArrayList<>();
-        for(int i = 0; i  < 52; i++) {
-            Card temp = new Card(arraycopy[i], game);
-            deck.add(temp);
-        }
-    }
+    }*/
 }

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 class PlayerC8 extends Player{
@@ -57,8 +56,8 @@ class PlayerC8 extends Player{
     }
     public int changeSuit(int number){
         int[] arr = {0, 0, 0, 0};
-        for(int i = 0; i < player.size(); i++){
-            arr[player.get(i).getSuit(true)]++;
+        for (Card card : player) {
+            arr[card.getSuit(true)]++;
         }
         int maxI = findMax(arr);
         for(int i = 2; i <= number; i++){
@@ -139,7 +138,7 @@ class PlayerC8 extends Player{
 
 public class Crazy8 {
     static ArrayList<Card> deck = new ArrayList<>();
-    public static boolean isEmpty(PlayerC8[] arr){
+    static boolean isEmpty(PlayerC8[] arr){
         boolean empty1 = false;
         for(PlayerC8 that : arr){
             if(that.size() != 0){
@@ -150,7 +149,7 @@ public class Crazy8 {
         return false;
     }
     public static void main(String[] args) {
-        Card.process(deck, 2);
+        General.process(deck, 2);
         int counter = 0;
         PlayerC8[] players = new PlayerC8[6];
         for(int i = 0; i < 6; i++){
