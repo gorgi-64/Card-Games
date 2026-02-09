@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-
 class PlayerC8 extends Player{
     static Scanner input = new Scanner(System.in);
     protected int personality;
@@ -9,7 +8,7 @@ class PlayerC8 extends Player{
     @Override
     public void printCards(){
         for(int i = 0; i < player.size(); i++){
-            System.out.print(i + ". " + player.get(i).getAll() + " ");
+            System.out.print(i + ". " + player.get(i).getAll() + "; ");
         }
     }
 
@@ -40,8 +39,8 @@ class PlayerC8 extends Player{
     }
     public static int highestP(ArrayList<Card> cards, Card top, int suit){
         int highest = 0;
-        for(int i = 0; i < cards.get(0).getScore(); i++){
-            if(cards.get(i).getScore() > cards.get(highest).getScore() && isPlayable(cards.get(i), top, suit)) highest = i;
+        for(int i = 0; i < cards.size(); i++){
+            if(cards.get(i).getScore() > cards.get(highest).getScore() && isPlayable(cards.get(i), top, suit)) highest = i; //this
         }
         return highest;
     }
@@ -75,14 +74,16 @@ class PlayerC8 extends Player{
             return decision - 1;
         }
         if(personality == 1 || personality == 2){
-            return (int)(Math.random() * 4);
+            decision =  (int)(Math.random() * 4);
         }
         if(personality != 4){
-            return changeSuit(1);
+            decision =  changeSuit(1);
         }
         else{
-            return changeSuit((Math.random() < 0.5 ? 2 : 3));
+            decision =  changeSuit((Math.random() < 0.5 ? 2 : 3));
         }
+        System.out.println("Changed to " + Card.suitSymbol(decision));
+        return decision;
     }
 
 
@@ -108,7 +109,7 @@ class PlayerC8 extends Player{
                     if(player.get(i).getSymbol() == '8') return i;
                 }
             }
-            return playable.get((int)(Math.random() * playable.size()) + 1);
+            return playable.get((int)(Math.random() * playable.size()));
         }
         if(personality == 3){
             for(int i = 0; i < player.size(); i++){
@@ -136,7 +137,7 @@ class PlayerC8 extends Player{
 
 }
 
-public class Crazy8 {
+public class Crazy8  {
     static ArrayList<Card> deck = new ArrayList<>();
     static boolean isEmpty(PlayerC8[] arr){
         boolean empty1 = false;
@@ -155,16 +156,21 @@ public class Crazy8 {
         for(int i = 0; i < 6; i++){
             PlayerC8 temp;
                 int personality = (int)(Math.random() * 5) + 1;
-                temp = new PlayerC8(i == 0, ((i == 0) ? 0 : personality), War.subArrayList(deck, counter, counter + 6));
+                temp = new PlayerC8(i == 0, ((i == 0) ? 0 : personality), General.subArrayList(deck, counter, counter + 6));
                 counter += 7;
                 players[i] = temp;
         }
-        Card top = deck.get(0);
+        Card top = deck.get(counter);
         int suit = top.getSuit();
         deck.remove(0);
-       for(int i = 0; !isEmpty(players); i = (i + 1) % 6){
+       for(int i = 0; isEmpty(players); i = (i + 1) % 6){
+           if(players[i].size() == 0) continue;
+           System.out.println("Player number" + i);
+           System.out.println("Top card: " + top.getAll());
             int decision = players[i].getDecision(top, suit);
             while(decision == -1){
+                System.out.println("No card, must draw!");
+                System.out.println("Draw: " + deck.get(0).getAll());
                 players[i].addCard(deck.get(0));
                 deck.remove(0);
                 decision = players[i].getDecision(top, suit);
@@ -173,6 +179,7 @@ public class Crazy8 {
             top = players[i].getCard(decision);
             suit = (top.getSymbol() == '8') ? players[i].changeSuit() : top.getSuit(true);
             players[i].removeCard();
+            System.out.println("Given card: " + top.getAll());
         }
     }
 }

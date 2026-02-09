@@ -22,17 +22,11 @@ class PlayerW extends Player{
         player.subList(start, end + 1).clear();
     }
     public ArrayList<Card> returnCards(int start, int end){
-        return War.subArrayList(player, start, end);
+        return General.subArrayList(player, start, end);
     }
 }
 public class War {
-    public static ArrayList<Card> subArrayList(ArrayList<Card> one, int firstIndex, int secondIndex){
-        ArrayList<Card> nov = new ArrayList<>();
-        for(int i = firstIndex; i < secondIndex; i++){
-            nov.add(one.get(i));
-        }
-        return nov;
-    }
+    
     public static int potSz(int sz1, int sz2){
         return Math.min(Math.min(sz1, sz2), 3);
 
@@ -84,8 +78,8 @@ public class War {
 
     public static void main(String[] args) {
         General.process(deck, 0);
-        PlayerW one = new PlayerW(subArrayList(deck, 0, 25), false);
-        PlayerW two = new PlayerW(subArrayList(deck, 26, 51), false);
+        PlayerW one = new PlayerW(General.subArrayList(deck, 0, 25), false);
+        PlayerW two = new PlayerW(General.subArrayList(deck, 26, 51), false);
         while(one.size() != 0 && two.size() != 0){
             System.out.println("Player one gives: " + one.getCard(0).getAll());
             System.out.println("Player two gives: " + two.getCard(0).getAll());

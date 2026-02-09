@@ -36,4 +36,12 @@ public interface General {
         Scanner input = new Scanner(in);
         input.nextLine();
     }
+    static <T> ArrayList<T> subArrayList(ArrayList<T> one, int firstIndex, int secondIndex){
+        ArrayList<T> nov = new ArrayList<>();
+        for(int i = firstIndex; i < secondIndex; i++){
+            nov.add(one.get(i));
+        }
+        return nov;
+    }
+
 }

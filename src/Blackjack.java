@@ -3,7 +3,6 @@ import java.util.Scanner;
 import java.util.Random;
 
 import static java.lang.System.in;
-
 class PlayerBJ extends Player {
     int condition;
     boolean dealer;
