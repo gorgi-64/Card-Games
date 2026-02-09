@@ -22,7 +22,7 @@ class PlayerC8 extends Player{
         player.remove(0);
     }
     public static boolean isPlayable(Card top, Card card, int suit){
-        return card.getSymbol() == top.getSymbol() || card.getSuit() == suit || card.getSymbol() == '8';
+        return ((card.getSymbol() == top.getSymbol()) || (card.getSuit(true) == suit) || (card.getSymbol() == '8'));
     }
     public boolean isPlayable(Card top, int suit){
         for(Card card : player){
@@ -162,7 +162,9 @@ public class Crazy8  {
         }
         Card top = deck.get(counter);
         int suit = top.getSuit();
-        deck.remove(0);
+        for(int i = 0; i <= counter + 1; i++){
+            deck.remove(0);
+        }
        for(int i = 0; isEmpty(players); i = (i + 1) % 6){
            if(players[i].size() == 0) continue;
            System.out.println("Player number" + i);
