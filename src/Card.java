@@ -51,7 +51,7 @@ public class Card {
     }
     public int setScore(int temp, int game){
         if(game == 0) return temp; //general
-        if(game == 1) return ((temp > 10 && temp != 14) ? 10 : temp); //blackjack
+        if(game == 1) return (temp > 10 && temp != 14) ? 10 : (temp == 14) ? 11 : temp; //blackjack
         if(game == 2){ //crazy 8
             if(temp == 8) return 80;
             if(temp >= 11 && temp <= 13) return 10;

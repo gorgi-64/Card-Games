@@ -16,9 +16,14 @@ class PlayerBJ extends Player {
     }
     public int suma() {
         int s = 0;
+        int ace = 0;
         for (Card card : player) {
-            if (card.getScore() > 10 || card.getScore() == 1) card.setScore(s + 11 <= 21);
             s += card.getScore();
+            if(card.getSymbol() == 'A') ace++;
+        }
+        while(s > 21 && ace > 0){
+            s -= 10;
+            ace--;
         }
         sum = s;
         return s;
