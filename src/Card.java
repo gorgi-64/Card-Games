@@ -35,7 +35,7 @@ public class Card {
         suit = number % 4;
         score = setScore(temp, game);
     }
-    public char suitSymbol(int number){
+    public static char suitSymbol(int number){
         switch(number){
             case 0:
                 return '♥';
@@ -97,6 +97,7 @@ public class Card {
             } while(arraycopy[newrandom] != 0);
             arraycopy[newrandom] = array[i];
         }
+        if(deck == null) deck = new ArrayList<>();
         for(int i = 0; i  < 52; i++) {
             Card temp = new Card(arraycopy[i], game);
             deck.add(temp);
