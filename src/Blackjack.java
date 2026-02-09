@@ -211,6 +211,7 @@ public class Blackjack {
             gameloop(6);
             General.pause();
             int decision = input.nextInt();
+            if(decision == 1) break;
         }
 
     }

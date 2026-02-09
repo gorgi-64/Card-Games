@@ -1,8 +1,7 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 class PlayerW extends Player{
-    private boolean finalBattle;
+    //private boolean finalBattle;
     @SuppressWarnings("All")
     public PlayerW(ArrayList<Card> cards, boolean you){
         super(you);
