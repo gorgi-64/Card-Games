@@ -4,22 +4,32 @@ class PlayerC8 extends Player{
     static Scanner input = new Scanner(System.in);
     protected int personality;
     //0: you, 1: dumb, 2: chaotic, 3: aggressive, 4: cautious, 5: smart
-
+    protected int points = 0;
     @Override
     public void printCards(){
         for(int i = 0; i < player.size(); i++){
-            System.out.print(i + ". " + player.get(i).getAll() + "; ");
+            System.out.print("[" + i + ". ");
+            System.out.print("\u001B[1m" +  player.get(i).getAll() + "\u001B[0m]; ");
         }
     }
-
+    public void findPoints(){
+        for(Card card : player){
+            points += card.getScore();
+        }
+    }
+    public int getPoints(){
+        return points;
+    }
     public PlayerC8(boolean you, int personality, ArrayList<Card> player){
         super(you);
         this.personality = personality;
         this.player = player;
     }
-
-    public void removeCard(){
-        player.remove(0);
+    public ArrayList<Card> returnPlayer(){
+        return player;
+    }
+    public void removeCard(int index){
+        player.remove(index);
     }
     public static boolean isPlayable(Card top, Card card, int suit){
         return ((card.getSymbol() == top.getSymbol()) || (card.getSuit(true) == suit) || (card.getSymbol() == '8'));
@@ -68,15 +78,15 @@ class PlayerC8 extends Player{
     public int changeSuit(){
         int decision;
         if(personality == 0){
-            System.out.println("Enter the suit you want to change to: ( ");
+            System.out.print("Enter the suit you want to change to: ( ");
             for(int i = 0; i < 4; i++) System.out.print(i + ": " + Card.suitSymbol(i) + ((i == 3) ? ")" : ", "));
             decision = input.nextInt();
-            return decision - 1;
+            //return decision - 1;
         }
-        if(personality == 1 || personality == 2){
+         else if(personality == 1 || personality == 2){
             decision =  (int)(Math.random() * 4);
         }
-        if(personality != 4){
+        else if(personality != 4){
             decision =  changeSuit(1);
         }
         else{
@@ -88,7 +98,7 @@ class PlayerC8 extends Player{
 
 
     public int getDecision(Card top, int suit){
-        if(!isPlayable(top, suit)) return -1;
+        if(!isPlayable(top, suit)){ return -1; }
         ArrayList<Integer> playable = new ArrayList<>();
         for(int i = 0; i < player.size(); i++){
             if(isPlayable(top, player.get(i), suit)) playable.add(i);
@@ -149,6 +159,12 @@ public class Crazy8  {
         }
         return false;
     }
+    public static boolean hasEmpty(PlayerC8[] players){
+        for(PlayerC8 player : players){
+            if(player.size() == 0) return true;
+        }
+        return false;
+    }
     public static void main(String[] args) {
         General.process(deck, 2);
         int counter = 0;
@@ -165,11 +181,17 @@ public class Crazy8  {
         for(int i = 0; i <= counter + 1; i++){
             deck.remove(0);
         }
+        //boolean calculatePoints
        for(int i = 0; isEmpty(players); i = (i + 1) % 6){
            if(players[i].size() == 0) continue;
-           System.out.println("Player number" + i);
+           if(players[i].getPoints() >= 100 && hasEmpty(players)){
+               deck.addAll(players[i].returnPlayer());
+               players[i].player.clear();
+           }
+           System.out.println("Player number " + i);
            System.out.println("Top card: " + top.getAll());
             int decision = players[i].getDecision(top, suit);
+            General.wait(500);
             while(decision == -1){
                 System.out.println("No card, must draw!");
                 System.out.println("Draw: " + deck.get(0).getAll());
@@ -180,8 +202,11 @@ public class Crazy8  {
             deck.add(top);
             top = players[i].getCard(decision);
             suit = (top.getSymbol() == '8') ? players[i].changeSuit() : top.getSuit(true);
-            players[i].removeCard();
+            players[i].removeCard(decision);
             System.out.println("Given card: " + top.getAll());
+            System.out.println("\n");
+            players[i].findPoints();
+            General.wait(1000);
         }
     }
 }
