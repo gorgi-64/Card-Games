@@ -159,7 +159,7 @@ public class Crazy8  {
         }
         return false;
     }
-    public static boolean hasEmpty(PlayerC8[] players){
+    static boolean hasEmpty(PlayerC8[] players){
         for(PlayerC8 player : players){
             if(player.size() == 0) return true;
         }
@@ -178,15 +178,15 @@ public class Crazy8  {
         }
         Card top = deck.get(counter);
         int suit = top.getSuit();
-        for(int i = 0; i <= counter + 1; i++){
-            deck.remove(0);
-        }
+
+        deck.subList(0, counter + 2).clear();
         //boolean calculatePoints
        for(int i = 0; isEmpty(players); i = (i + 1) % 6){
            if(players[i].size() == 0) continue;
            if(players[i].getPoints() >= 100 && hasEmpty(players)){
                deck.addAll(players[i].returnPlayer());
                players[i].player.clear();
+               System.out.println("Player's points are over 100 and loses automatically!");
            }
            System.out.println("Player number " + i);
            System.out.println("Top card: " + top.getAll());
