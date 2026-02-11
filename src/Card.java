@@ -7,8 +7,14 @@ public class Card {
 
 
     public Card(int number, int game){
+        score = number;
+        suit = number % 4;
+        score = setScore((number % 13) + 2, game);
+        symbol = rankSymbol(score);
+    }
+    public static char rankSymbol(int number){
         int temp = (number % 13) + 2;
-        score = temp;
+        char symbol = '0';
         if(temp < 10) symbol = (char) ('0' + temp);
         else switch(temp) {
             case 10:
@@ -27,8 +33,7 @@ public class Card {
                 symbol = 'A';
                 break;
         }
-        suit = number % 4;
-        score = setScore(temp, game);
+        return symbol;
     }
     public static char suitSymbol(int number){
         switch(number){

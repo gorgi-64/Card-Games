@@ -29,7 +29,11 @@ class PlayerC8 extends Player{
         return player;
     }
     public void removeCard(int index){
-        player.remove(index);
+        if(player.size() == 1) {
+            player.clear();
+            System.out.println("Player runs out of cards!");
+        }
+        else player.remove(index);
     }
     public static boolean isPlayable(Card top, Card card, int suit){
         return ((card.getSymbol() == top.getSymbol()) || (card.getSuit(true) == suit) || (card.getSymbol() == '8'));
@@ -159,11 +163,12 @@ public class Crazy8  {
         }
         return false;
     }
-    static boolean hasEmpty(PlayerC8[] players){
+    static int numberEmpty(PlayerC8[] players){
+        int counter = 0;
         for(PlayerC8 player : players){
-            if(player.size() == 0) return true;
+            if(player.size() == 0) counter++;
         }
-        return false;
+        return counter;
     }
     public static void main(String[] args) {
         General.process(deck, 2);
@@ -173,6 +178,7 @@ public class Crazy8  {
             PlayerC8 temp;
                 int personality = (int)(Math.random() * 5) + 1;
                 temp = new PlayerC8(i == 0, ((i == 0) ? 0 : personality), General.subArrayList(deck, counter, counter + 6));
+                //temp = new PlayerC8(false, personality, General.subArrayList(deck, counter, counter + 6));
                 counter += 7;
                 players[i] = temp;
         }
@@ -181,12 +187,28 @@ public class Crazy8  {
 
         deck.subList(0, counter + 2).clear();
         //boolean calculatePoints
-       for(int i = 0; isEmpty(players); i = (i + 1) % 6){
-           if(players[i].size() == 0) continue;
-           if(players[i].getPoints() >= 100 && hasEmpty(players)){
+        int[] places = {-1, -1, -1, -1, -1, -1};
+        int winindex = 0;
+        int loseindex = 5;
+        int empty = 0;
+       for(int i = 0; numberEmpty(players) <= 5; i = (i + 1) % 6){
+           if(numberEmpty(players) == 5){
+               for(int j = 0; j < places.length; j++){
+                   if(places[j] == -1){ places[j] = i; break;}
+               }
+           }
+           if(players[i].size() == 0){
+               places[winindex] = i;
+               winindex++;
+               continue;
+           }
+           if(players[i].getPoints() >= 100 && numberEmpty(players) > empty){
                deck.addAll(players[i].returnPlayer());
                players[i].player.clear();
-               System.out.println("Player's points are over 100 and loses automatically!");
+               places[loseindex--] = i;
+               System.out.println("Player " + i + " 's points are over 100 and loses automatically!");
+                empty++;
+               continue;
            }
            System.out.println("Player number " + i);
            System.out.println("Top card: " + top.getAll());
@@ -194,6 +216,10 @@ public class Crazy8  {
             General.wait(500);
             while(decision == -1){
                 System.out.println("No card, must draw!");
+                if(deck.isEmpty()){
+                    System.out.println("Deck empty; skipped turn");
+                    continue;
+                }
                 System.out.println("Draw: " + deck.get(0).getAll());
                 players[i].addCard(deck.get(0));
                 deck.remove(0);
@@ -208,5 +234,8 @@ public class Crazy8  {
             players[i].findPoints();
             General.wait(1000);
         }
+       for(int i = 0; i <= 5; i++){
+           System.out.println((i + 1) + ": " + places[i] + ((places[i] == 0) ? " (you)" : ""));
+       }
     }
 }
