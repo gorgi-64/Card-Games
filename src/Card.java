@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 public class Card {
 
     protected char symbol;
@@ -12,6 +14,12 @@ public class Card {
         score = setScore((number % 13) + 2, game);
         symbol = rankSymbol(score);
     }
+   public static Comparator<Card> rankSort = new Comparator<Card>() {
+        @Override
+        public int compare(Card card, Card t1) {
+            return card.getScore() - t1.getScore();
+        }
+    };
     public static char rankSymbol(int number){
         int temp = (number % 13) + 2;
         char symbol = '0';
