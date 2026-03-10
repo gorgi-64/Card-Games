@@ -75,7 +75,7 @@ public class Blackjack {
     }
     static void hand(PlayerBJ player) {
         Scanner input = new Scanner(in);
-        player.printCards();
+        //player.printCards();
         if(player.getDealer() && player.suma() < 17) {
             System.out.println("Hit until 17");
             while(player.suma() < 17) {
@@ -185,7 +185,7 @@ public class Blackjack {
                 }
             }
 
-            if(i != playerAmount - 1) System.out.print("PLayer " + i + ": ");
+            if(i != playerAmount - 1) System.out.print("PlLayer " + i + ": ");
             else System.out.print("Dealer: ");
             hand(playerS[i]);
             System.out.print("\n");

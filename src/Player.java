@@ -21,6 +21,7 @@ public abstract class Player {
             System.out.print(player.get(i).getAll());
             if(i != player.size() - 1) System.out.print(", ");
         }
+        System.out.print('\n');
     }
 
 }

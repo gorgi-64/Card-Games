@@ -1,45 +1,32 @@
 import java.util.Comparator;
-
+@SuppressWarnings("all")
 public class Card {
 
     protected char symbol;
     protected int score;
     protected int suit;
 
-
-
     public Card(int number, int game){
         score = number;
         suit = number % 4;
         score = setScore((number % 13) + 2, game);
-        symbol = rankSymbol(score);
+        symbol = rankSymbol(number % 13 + 2);
     }
-   public static Comparator<Card> rankSort = new Comparator<Card>() {
+   public static Comparator<Card> rankSort = new Comparator<>() {
         @Override
         public int compare(Card card, Card t1) {
             return card.getScore() - t1.getScore();
         }
     };
     public static char rankSymbol(int number){
-        int temp = (number % 13) + 2;
         char symbol = '0';
-        if(temp < 10) symbol = (char) ('0' + temp);
-        else switch(temp) {
-            case 10:
-                symbol = 'X';
-                break;
-            case 11:
-                symbol = 'J';
-                break;
-            case 12:
-                symbol = 'Q';
-                break;
-            case 13:
-                symbol = 'K';
-                break;
-            case 14:
-                symbol = 'A';
-                break;
+        if(number >= 2 && number < 10) symbol = (char) ('0' + number);
+        else switch(number) {
+            case 10: symbol = 'X'; break;
+            case 11: symbol = 'J'; break;
+            case 12: symbol = 'Q'; break;
+            case 13: symbol = 'K'; break;
+            case 14: symbol = 'A'; break;
         }
         return symbol;
     }
@@ -84,6 +71,9 @@ public class Card {
         if(that) return suit;
         return 0;
     }
+     public String print(){
+        return symbol + "" + suitSymbol(suit);
+     }
     /*public void setScore(boolean ace) {
         if(ace) score = 11;
         else score = 1;

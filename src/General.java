@@ -15,22 +15,21 @@ public interface General {
     static void process(ArrayList<Card> deck, int game){
         Random newrand = new Random(System.nanoTime());
         int[] array = new int[52];
-        for(int i = 0; i < 52; i++) {
+        for (int i = 0; i < 52; i++) {
             array[i] = i;
         }
-        int[] arraycopy = new int[52];
-        for(int i = 0; i < 52; i++) {
-            int newrandom;
-            do {
-                newrandom = newrand.nextInt(52);
-            } while(arraycopy[newrandom] != 0);
-            arraycopy[newrandom] = array[i];
+        for (int i = 51; i > 0; i--) {
+            int j = newrand.nextInt(i + 1);
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
         if(deck == null) deck = new ArrayList<>();
         for(int i = 0; i  < 52; i++) {
-            Card temp = new Card(arraycopy[i], game);
+            Card temp = new Card(array[i], game);
             deck.add(temp);
         }
+
     }
     static void pause() {
         Scanner input = new Scanner(in);
