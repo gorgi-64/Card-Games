@@ -161,7 +161,7 @@ public class Blackjack {
 
         else System.out.println("Lose!");
     }
-    public static void gameloop(int playerAmount) {
+    public static void gameLoop(int playerAmount) {
 
         PlayerBJ[] playerS = new PlayerBJ[playerAmount];
         PlayerBJ[] split = new PlayerBJ[playerAmount];
@@ -220,7 +220,7 @@ public class Blackjack {
         while(true) {
             deck = new ArrayList<>();
             General.process(deck, 1);
-            gameloop(6);
+            gameLoop(6);
             System.out.println("Play again? (1: no, 2: yes)");
             int decision = input.nextInt();
             if(decision == 1) break;
