@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
-
 import static java.lang.System.in;
+
 class PlayerBJ extends Player {
     int condition;
     boolean dealer;
@@ -16,7 +16,7 @@ class PlayerBJ extends Player {
         this.addCard(og.getCard(1));
         og.remove(1);
     }
-
+    @SuppressWarnings("all")
     private void remove(int i) {
         player.remove(i);
     }
@@ -55,11 +55,10 @@ class PlayerBJ extends Player {
         you = ti;
         condition = 1;
     }
-    public void Split() {
-        player.remove(1);
-    }
 }
+
 //hi
+
 public class Blackjack {
     static Random rand = new Random();
     static int counter = 0;
@@ -69,7 +68,7 @@ public class Blackjack {
         counter++;
         player.addCard(deck.get(counter));
         System.out.println("Player hits and gets a " + deck.get(counter).getAll());
-        General.wait(450);
+        General.wait(650);
 
     }
     public static void twentyone(boolean bust) {
@@ -135,7 +134,6 @@ public class Blackjack {
                 return;
             }
         }
-
     }
     static void winConditions(PlayerBJ one, PlayerBJ dealer) {
         if(one.suma() > 21) {
@@ -164,7 +162,7 @@ public class Blackjack {
         else System.out.println("Lose!");
     }
     public static void gameloop(int playerAmount) {
-        General.process(deck, 1);
+
         PlayerBJ[] playerS = new PlayerBJ[playerAmount];
         PlayerBJ[] split = new PlayerBJ[playerAmount];
         int playnernumber = rand.nextInt(playerAmount);
@@ -220,15 +218,13 @@ public class Blackjack {
     }
     public static void main(String[] args) {
         while(true) {
-            rand = new Random(System.nanoTime());
-            rand = new Random(System.nanoTime());
+            deck = new ArrayList<>();
+            General.process(deck, 1);
             gameloop(6);
-            General.pause();
-            int decision = input.nextInt();
             System.out.println("Play again? (1: no, 2: yes)");
+            int decision = input.nextInt();
             if(decision == 1) break;
         }
-
     }
 }
 

@@ -13,13 +13,13 @@ public interface General {
         }
     }
     static void process(ArrayList<Card> deck, int game){
-        Random newrand = new Random(System.nanoTime());
+        //Random newRand = new Random(System.nanoTime());
         int[] array = new int[52];
         for (int i = 0; i < 52; i++) {
             array[i] = i;
         }
         for (int i = 51; i > 0; i--) {
-            int j = newrand.nextInt(i + 1);
+            int j = rng(i + 1);
             int temp = array[i];
             array[i] = array[j];
             array[j] = temp;
@@ -42,5 +42,7 @@ public interface General {
         }
         return nov;
     }
-
+    static int rng(int limit){
+        return (int)(Math.random() * limit);
+    }
 }
