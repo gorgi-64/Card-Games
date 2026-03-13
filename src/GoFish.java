@@ -47,7 +47,7 @@ class PlayerGF extends Player {
     public char addQuartet() {
         char card = '0';
         player.sort(Card.rankSort);
-        for (int i = 0; i < player.size(); i += 4) {
+        for (int i = 0; i < player.size() - 4; i += 4) {
             if (player.get(i) == player.get(i + 3)) {
                 quartet.add(player.get(i).getSymbol());
                 card = player.get(i).getSymbol();
