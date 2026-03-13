@@ -10,6 +10,17 @@ class PlayerBJ extends Player {
     public PlayerBJ(){
         super(true);
     }
+    public void splitConstructor(PlayerBJ og){
+        this.dealer = og.dealer;
+        this.you = og.you;
+        this.addCard(og.getCard(1));
+        og.remove(1);
+    }
+
+    private void remove(int i) {
+        player.remove(i);
+    }
+
     public boolean getYou() {
         return you;
     }
@@ -76,6 +87,11 @@ public class Blackjack {
     static void hand(PlayerBJ player) {
         Scanner input = new Scanner(in);
         //player.printCards();
+        if(player.suma() == 21 && player.sizes() == 2){
+            System.out.println("Blackjack!");
+            return;
+
+        }
         if(player.getDealer() && player.suma() < 17) {
             System.out.println("Hit until 17");
             while(player.suma() < 17) {
@@ -165,7 +181,7 @@ public class Blackjack {
         }
         System.out.println("You are player " + playnernumber);
         General.pause();
-        for(int i = 0; i < playerAmount - 1; i++) {
+        for(int i = 0; i < playerAmount; i++) {
             if(playerS[i].getCard(0).getScore() == playerS[i].getCard(1).getScore()) {
                 int choice;
                 if(playerS[i].getYou()) {
@@ -180,12 +196,11 @@ public class Blackjack {
                 if(choice != 2){
                     System.out.println("Player " + i + " splits!");
                     split[i] = new PlayerBJ();
-                    split[i].addCard(playerS[i].getCard(1));
-                    playerS[i].Split();
+                    split[i].splitConstructor(playerS[i]);
                 }
             }
 
-            if(i != playerAmount - 1) System.out.print("PlLayer " + i + ": ");
+            if(i != playerAmount - 1) System.out.print("Player " + i + ": ");
             else System.out.print("Dealer: ");
             hand(playerS[i]);
             System.out.print("\n");
@@ -210,6 +225,7 @@ public class Blackjack {
             gameloop(6);
             General.pause();
             int decision = input.nextInt();
+            System.out.println("Play again? (1: no, 2: yes)");
             if(decision == 1) break;
         }
 
