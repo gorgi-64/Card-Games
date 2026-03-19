@@ -10,7 +10,7 @@ class PlayerW extends Player{
     }
     @Override
     public void printCards(){
-        System.out.println("Ne moje v tazi igra :3");
+        System.out.println("Не може в тази игра :3");
     }
     public void removeCard(){
         player.remove(0);
@@ -46,13 +46,13 @@ public class War {
             //house rules
             return;
         }
-        int potsz = potSz(one.size(), two.size()) - 1;
-        Card lastOne = one.getCard(potsz);
-        Card lastTwo = two.getCard(potsz);
-        pot.addAll(one.returnCards(0, potsz));
-        pot.addAll(two.returnCards(0, potsz));
-        one.removeCards(0, potsz);
-        two.removeCards(0, potsz);
+        int potSize = potSz(one.size(), two.size()) - 1;
+        Card lastOne = one.getCard(potSize);
+        Card lastTwo = two.getCard(potSize);
+        pot.addAll(one.returnCards(0, potSize));
+        pot.addAll(two.returnCards(0, potSize));
+        one.removeCards(0, potSize);
+        two.removeCards(0, potSize);
         for(int i = 0; i < pot.size(); i++){
             if(i == 0) System.out.print("Player one gives: ");
             System.out.print(pot.get(i).getAll() + " ");
