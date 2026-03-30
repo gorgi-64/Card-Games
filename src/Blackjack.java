@@ -30,7 +30,7 @@ class PlayerBJ extends Player {
         you = ti;
         condition = 1;
         DD = false;
-
+        totalSum = obshtaSuma;
     }
 
     public void setDD(){
@@ -49,13 +49,14 @@ class PlayerBJ extends Player {
         totalSum += amount;
     }
     public void setCurrentSum(int mode){
+        if(this.dealer) currentSum = 0.0;
         switch(mode){
             case 1:
                 System.out.println("How much do you want to bet? (You have $" + totalSum + ")");
                 currentSum = new Scanner(System.in).nextDouble();
                 break;
             case 2:
-                currentSum = totalSum * new int[]{1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10}[General.rng(16)] / 10.0;
+                currentSum = totalSum * new int[]{1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 3, 6, 7, 8, 9, 10}[General.rng(16)] / 10.0;
                 //currentSum = 10.0;
                 break;
             case 3:
@@ -251,18 +252,13 @@ public class Blackjack {
         }
     }
     public static void gameLoop(int playerAmount) {
-        if(withMoney){
-            for(int i = 0; i < playerS.length; i++) {
-                playerS[i].setCurrentSum(playerS[i].getYou() ? 1 : 2);
-                err.println(playerS[i].getCurrentSum());
-            }
-        }
         General.shuffle(playerS);
-        //PlayerBJ[] playerS = new PlayerBJ[playerAmount];
         PlayerBJ[] split = new PlayerBJ[playerAmount];
         int playerNumber = rand.nextInt(playerAmount);
         for(int i = 0; i < playerAmount; i++) {
-            playerS[i] = new PlayerBJ(deck.get(i * 2), deck.get(i * 2 + 1), (i == playerAmount - 1), playerS[i].getTotalSum(), playerS[i].getYou());
+            double temp = playerS[i].getTotalSum();
+            playerS[i] = new PlayerBJ(deck.get(i * 2), deck.get(i * 2 + 1), (i == playerAmount - 1), temp, playerS[i].getYou());
+            if(withMoney) playerS[i].setCurrentSum((playerS[i].getYou()) ? 1 : 2);
             //(Card one, Card two, boolean deal, double obshtaSuma, boolean ti)
         }
         counter = (playerAmount * 2) - 1; //8 Cards, 0 index
@@ -281,6 +277,7 @@ public class Blackjack {
             if(playerS[i].split(d.getCard(0))){
                 split[i] = new PlayerBJ(playerS[i]);
             }
+            if(i != playerAmount - 1) System.out.print("Player " + i + ": ");
             if(i != playerAmount - 1) System.out.print("Player " + i + ": ");
             else System.out.print("Dealer: ");
             hand(playerS[i]);
@@ -321,17 +318,19 @@ public class Blackjack {
             return -1.0; // Lose - lose bet
         }
     }
-
-    @SuppressWarnings("ClassEscapesDefinedScope")
-
+    @SuppressWarnings("all")
     public static void winWithMoney(PlayerBJ[] playerS, PlayerBJ[] split, int playerNumber){
+        double pot = 0;
         int playerAmount = playerS.length;
+        int counter = 0;
+        PlayerBJ[] nonbusted = new PlayerBJ[playerS.length];
         for(int i = 0; i < playerS.length - 1; i++) {
             System.out.print("Player " + i + ((i == playerNumber) ? "(you)" : "") + ": ");
             double temp = playerS[i].getCurrentSum();
             double coefficient = winConditions(playerS[i], playerS[playerAmount - 1]);
-
+            //out.println(temp);
             double winnings = temp * coefficient;
+            pot += (winnings <= 0 ? winnings : 0);
             if(split[i] != null) {
                 System.out.print("\nSplit: ");
                 coefficient = winConditions(split[i], playerS[playerAmount - 1]);
@@ -339,9 +338,14 @@ public class Blackjack {
                 winnings += (temp * coefficient);
 
             }
-            System.out.println("\nWinnings: " + winnings);
+            System.out.println("\nWinnings: $" + winnings);
             playerS[i].addSum(winnings);
+            pot += (winnings <= 0 ? winnings : 0);
+            if(playerS[i].getTotalSum() == 0.0) continue;
+            nonbusted[counter++] = playerS[i];
         }
+        playerS[playerS.length - 1].addSum(Math.abs(pot));
+        playerS = nonbusted;
     }
 
 
@@ -375,6 +379,9 @@ public class Blackjack {
                 out.println("every hand you may double down (hit exactly once for double the bet)");
             }
          } while(choice == 3);
+         if(!(choice == 1 || choice == 2)){
+             throw new IllegalArgumentException("Invalid input!");
+         }
          withMoney = (choice == 2);
          playerNumber = 6;
          playerS = new PlayerBJ[playerNumber];
