@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 
-import static java.lang.System.*;
-
 @SuppressWarnings("unused")
 class PlayerBJ extends Player {
     int condition;
@@ -49,7 +47,10 @@ class PlayerBJ extends Player {
         totalSum += amount;
     }
     public void setCurrentSum(int mode){
-        if(this.dealer) currentSum = 0.0;
+        if(this.dealer){
+            currentSum = 0.0;
+            return;
+        }
         switch(mode){
             case 1:
                 System.out.println("How much do you want to bet? (You have $" + totalSum + ")");
@@ -143,19 +144,38 @@ class PlayerBJ extends Player {
     }
 
     public boolean doubleDown(Card dealer) {
-        if(this.dealer || this.player.size() < 2 || (this.currentSum * 2) > this.totalSum) return false;
+        if(this.dealer || this.player.size() < 2 || (this.currentSum * 2) > this.totalSum) {
+            this.DD = false;
+            return false;
+        }
         if (this.you) {
             System.out.println("Do you want to double down? (1. no, 2. yes)");
-            return (new Scanner(System.in).nextInt() == 2);
+            this.DD = (new Scanner(System.in).nextInt() == 2);
+            return DD;
         } else {
             if (player.get(0).getSymbol() == 'A' || player.get(1).getSymbol() == 'A') {
-                if (this.suma() >= 13 && this.suma() <= 15 && (dealer.getScore() == 5 || dealer.getScore() == 6)) return true;
-                else if (this.suma() >= 16 && this.suma() <= 17 && (dealer.getScore() >= 4 && dealer.getScore() <= 6)) return true;
+                if (this.suma() >= 13 && this.suma() <= 15 && (dealer.getScore() == 5 || dealer.getScore() == 6)){
+                    this.DD = true;
+                    return true;
+                }
+                else if (this.suma() >= 16 && this.suma() <= 17 && (dealer.getScore() >= 4 && dealer.getScore() <= 6)){
+                    this.DD = true;
+                    return true;
+                }
                 else return this.suma() == 18 && dealer.getScore() >= 3 && dealer.getScore() <= 6;
             } else {
-                if (this.suma() == 11) return true;
-                else if (this.suma() == 10 && dealer.getScore() >= 2 && dealer.getScore() <= 9) return true;
-                else return this.suma() == 18 && dealer.getScore() >= 3 && dealer.getScore() <= 6;
+                if (this.suma() == 11){
+                    this.DD = true;
+                    return true;
+                }
+                else if (this.suma() == 10 && dealer.getScore() >= 2 && dealer.getScore() <= 9){
+                    this.DD = true;
+                    return true;
+                }
+                else{
+                    this.DD = this.suma() == 18 && dealer.getScore() >= 3 && dealer.getScore() <= 6;
+                    return DD;
+                }
             }
         }
     }
@@ -195,8 +215,8 @@ public class Blackjack {
     }
 
     static void hand(PlayerBJ player) {
-        Scanner input = new Scanner(in);
-
+        Scanner input = new Scanner(System.in);
+        player.printCards();
         if(player.suma() == 21 && player.sizes() == 2){
             System.out.println("Blackjack!");
             return;
@@ -221,7 +241,7 @@ public class Blackjack {
         while(true) {
             int choice;
             if(player.getYou()) {
-                player.printCards();
+                if(player.size() >= 3) player.printCards();
                 System.out.println("hit: 1, stand: 2");
                 choice = input.nextInt();
             }
@@ -263,7 +283,14 @@ public class Blackjack {
         }
         counter = (playerAmount * 2) - 1; //8 Cards, 0 index
         d = playerS[playerS.length - 1];
-
+        if(withMoney) {
+            System.out.println("What every player bet: ");
+            for (int i = 0; i < playerS.length - 1; i++) {
+                System.out.println("Player " + i + ((playerS[i].getYou()) ? "(you)" : "") + ": $" + playerS[i].getCurrentSum());
+            }
+            General.pause();
+            System.out.print("\n");
+        }
         System.out.println("Every player's Cards:" );
         for(int i = 0; i < playerAmount; i++) {
             System.out.print("Player " + i + ((playerS[i].getYou()) ? "(you)" : "") + ((i == playerAmount - 1) ? "(dealer)" : "") + ": " + playerS[i].getCard(0).getAll());
@@ -276,10 +303,14 @@ public class Blackjack {
         for(int i = 0; i < playerAmount; i++) {
             if(playerS[i].split(d.getCard(0))){
                 split[i] = new PlayerBJ(playerS[i]);
+
             }
+            System.out.print("\n");
             if(i != playerAmount - 1) System.out.print("Player " + i + ": ");
-            if(i != playerAmount - 1) System.out.print("Player " + i + ": ");
+            //if(i != playerAmount - 1) System.out.print("Player " + i + ": ");
             else System.out.print("Dealer: ");
+            //System.out.println(playerS[i].getCard(0).print() + " " + ((playerS[i].size() > 1) ? playerS[i].getCard(1).print() : "")) ;
+
             hand(playerS[i]);
             System.out.print("\n");
             if(split[i] != null) hand(split[i]);
@@ -293,28 +324,28 @@ public class Blackjack {
 
     static double winConditions(PlayerBJ one, PlayerBJ dealer) {
         if (one.suma() > 21) {
-            out.print("Bust!");
+            System.out.print("Bust!");
             return -1.0; // Bust - lose bet
         }
         else if (one.suma() == 21 && one.sizes() == 2) {
-            out.print("Blackjack!");
+            System.out.print("Blackjack!");
             return 1.5; // Blackjack - pays 3:2
         }
         else if (one.suma() == dealer.suma()) {
-            out.print("Push!");
+            System.out.print("Push!");
             return 0.0; // Push - bet returned
 
         }
         else if (one.suma() > dealer.suma() && one.suma() <= 21) {
-            out.print("Win!");
+            System.out.print("Win!");
             return 1.0; // Win - pays 1:1
         }
         else if (one.suma() <= 21 && dealer.suma() > 21) {
-            out.print("Win!");
+            System.out.print("Win!");
             return 1.0; // Win (dealer bust) - pays 1:1
         }
         else {
-            out.print("Lose!");
+            System.out.print("Lose!");
             return -1.0; // Lose - lose bet
         }
     }
@@ -325,10 +356,10 @@ public class Blackjack {
         int counter = 0;
         PlayerBJ[] nonbusted = new PlayerBJ[playerS.length];
         for(int i = 0; i < playerS.length - 1; i++) {
-            System.out.print("Player " + i + ((i == playerNumber) ? "(you)" : "") + ": ");
+            System.out.print("Player " + i + ((i == playerNumber) ? "(you)" : "") + (playerS[i].getDD() ? "(DD)" : "") + ": ");
             double temp = playerS[i].getCurrentSum();
-            double coefficient = winConditions(playerS[i], playerS[playerAmount - 1]);
-            //out.println(temp);
+            double coefficient = winConditions(playerS[i], playerS[playerAmount - 1]) * (playerS[i].getDD() ? 2 : 1);
+            //System.out.println(temp);
             double winnings = temp * coefficient;
             pot += (winnings <= 0 ? winnings : 0);
             if(split[i] != null) {
@@ -338,7 +369,7 @@ public class Blackjack {
                 winnings += (temp * coefficient);
 
             }
-            System.out.println("\nWinnings: $" + winnings);
+            System.out.println("\nWinnings: $" + winnings + "\n");
             playerS[i].addSum(winnings);
             pot += (winnings <= 0 ? winnings : 0);
             if(playerS[i].getTotalSum() == 0.0) continue;
@@ -355,28 +386,28 @@ public class Blackjack {
         for(int i = 0; i < playerS.length - 1; i++) {
             System.out.print("Player " + i + ((i == playerNumber) ? "(you)" : "") + ": ");
             winConditions(playerS[i], playerS[playerAmount - 1]);
-            out.println('\n');
+            System.out.println('\n');
             if(split[i] != null) {
                 System.out.print("\nSplit: ");
                 winConditions(split[i], playerS[playerAmount - 1]);
-                out.print('\n');
+                System.out.print('\n');
             }
         }
     }
 
 
     public static void main(String[] args) {
-         out.println("Welcome to Blackjack!");
+         System.out.println("Welcome to Blackjack!");
          int choice;
          do{
-            out.println("Enter 1 for game with no money, 2 for a game with money and 3 for rules!");
+            System.out.println("Enter 1 for game with no money, 2 for a game with money and 3 for rules!");
             choice = input.nextInt();
             if(choice == 3){
-                out.println("You are initially given two cards. You must either take more cards (hit) or give up (stand). ");
-                out.println("your objective is to reach as close to 21 without going over 21 (bust)");
-                out.println("Face cards (X, J, Q, K) are worth 10 points and an ace is worth either 1 or 11");
-                out.println("If you have two identical cards, you can split (play 2 hands at once)");
-                out.println("every hand you may double down (hit exactly once for double the bet)");
+                System.out.println("You are initially given two cards. You must either take more cards (hit) or give up (stand). ");
+                System.out.println("your objective is to reach as close to 21 without going over 21 (bust)");
+                System.out.println("Face cards (X, J, Q, K) are worth 10 points and an ace is worth either 1 or 11");
+                System.out.println("If you have two identical cards, you can split (play 2 hands at once)");
+                System.out.println("every hand you may double down (hit exactly once for double the bet)");
             }
          } while(choice == 3);
          if(!(choice == 1 || choice == 2)){
@@ -391,6 +422,10 @@ public class Blackjack {
         while(true) {
             deck = new ArrayList<>();
             General.process(deck, 1);
+            if(playerS[0].getTotalSum() == 0 && withMoney){
+                System.out.println("You lost! Goodbye!");
+                System.exit(0);
+            }
             gameLoop(playerNumber);
             System.out.println("Play again? (1: no, 2: yes)");
             int decision = input.nextInt();
